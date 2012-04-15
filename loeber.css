@@ -1,0 +1,15 @@
+.player {
+    display: inline-block;
+    width: 45%;
+    height: 220px;
+    background-color: darkblue;
+    color: yellow;
+    overflow: hidden;
+    border: 12px solid darkblue;
+}
+
+.row {
+    padding-top: 12px;
+    margin-left: auto;
+    margin-right: auto;
+}

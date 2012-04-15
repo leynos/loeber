@@ -1,0 +1,5 @@
+A preliminary player for Loebner Prize Chat Transcripts.  Currently, only the 2010 format is supported.
+
+This software makes use of jQuery and underscore.js, copyright their respective developers.
+
+The Loebner Prize Transcripts are in the Public Domain.
