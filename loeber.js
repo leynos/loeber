@@ -18,6 +18,7 @@
 
 var convLines = 0;
 var pause = false;
+var stop = false;
 var nextCallback;
 
 function findNextLine(lines, index, time) {
@@ -26,7 +27,9 @@ function findNextLine(lines, index, time) {
     }
     var parts = lines[index].split(' ');
     while (parts[0] != '') {
-        // window.alert('l '+index+' '+parts[0]);
+        if (parts[0] == 'starting') {
+            $('#round-no').html(parts[2]);
+        }
         index++;
         if (index >= lines.length) {
             return;
@@ -42,6 +45,10 @@ function findNextLine(lines, index, time) {
     }
     var callback = function() { 
         routeLine(lines, index, nexttime);
+    }
+    if (stop) {
+        stop = false;
+        return;
     }
     if (pause) {
         nextCallback = callback;
@@ -73,6 +80,7 @@ function routeLine(lines, index, time) {
 }
 
 function play(data) {
+    $('.player').contents().remove();
     var lines = data.split('\n');
     findNextLine(lines, 0, 0);
 }
@@ -88,11 +96,55 @@ $('#playpause').click(function() {
     }
 });
 
-$.ajax('logfile.Wilcox.2010-10-23--10-02-39.log', {
-    dataType: 'text',
-    success: function(d) {
+var logs = [
+    {
+        year: 2010,
+        file: 'logfile.Wilcox.2010-10-23--10-02-39.log',
+        name: 'Bruce Wilcox Program Transcript'
+    }, {
+        year: 2010,
+        file: 'logfile.Wallace.2010-10-23--10-01-41.log',
+        name: 'Richard Wallace Program Transcript'
+    }, {
+        year: 2010,
+        file: 'logfile.Carpenter.2010-10-23--10-02-10.log',
+        name: 'Rollo Carpenter Program Transcript'
+    }, {
+        year: 2010,
+        file: 'logfile.Medeksza.2010-10-23--10-03-04.log',
+        name: 'Robert Medeeksza Program Transcript'
+    }
+];
+
+function loadFile(f) {
+    function callback(d) {
+        if (stop) {
+            window.setTimeout(function() {callback(d);}, 10);
+        }
         play(d);
-    },
+    }
+    $.ajax(f, {
+        dataType: 'text',
+        success: function(d) {callback(d);}
+    });
+}
+
+$(window.document).ready(function() {
+    var logSelect = $('#log-select');
+    _.each(logs, function(log) {
+        logSelect.append(
+            '<option value="'+'chatlogs/' + log.year + '/' + log.file+'">'+
+                log.name+' ('+log.year+')</option>'
+        );
+    });
+    logSelect.change(function() {
+        stop = true;
+        loadFile(this.value);
+    });
+    log = logs[0];
+    loadFile('chatlogs/' + log.year + '/' + log.file);
 });
+
+
 
 })(window);
