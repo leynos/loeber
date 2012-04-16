@@ -120,8 +120,9 @@ function loadFile(f) {
     function callback(d) {
         if (stop) {
             window.setTimeout(function() {callback(d);}, 10);
+        } else {
+            play(d);
         }
-        play(d);
     }
     $.ajax(f, {
         dataType: 'text',
