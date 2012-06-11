@@ -87,11 +87,11 @@ function play(data) {
 
 $('#playpause').click(function() {
     if (pause) {
-        $(this).attr('value', '❚❚');
+        $(this).attr('value', $("<div/>").html('&#x275A;&#x275A;').text());
         pause = false;
         nextCallback();
     } else {
-        $(this).attr('value', '▸');
+        $(this).attr('value', $("<div/>").html('&#x25B8;').text());
         pause = true;
     }
 });
